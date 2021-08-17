@@ -12,8 +12,10 @@
   "author": "@mjtdev",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^16.6.1",
     "typescript": "^4.3.4"
   },
   "dependencies": {
+    "chokidar": "^3.5.2"
   }
 }

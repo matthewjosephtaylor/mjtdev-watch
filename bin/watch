@@ -7,11 +7,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chokidar_1 = __importDefault(require("chokidar"));
 const child_process_1 = require("child_process");
 const usage = () => {
-    console.log("watcher dir cmd [dir cmd]...");
+    console.log("watch path cmd [dir cmd]...");
 };
 const main = () => {
     const args = process.argv.slice(2);
-    if (args.length % 2 != 0) {
+    if (args.length % 2 !== 0) {
+        console.error(`Wrong number of args ${args.length}`);
         usage();
         process.exit(-1);
     }
@@ -20,12 +21,12 @@ const main = () => {
         doAfter: undefined,
     };
     for (let i = 0; i < args.length; i = i + 2) {
-        const dir = args[i];
+        const path = args[i];
         const cmd = args[i + 1];
-        parentState = watchDo({ dir, cmd, parentState });
+        parentState = watchDo({ path, cmd, parentState });
     }
 };
-const watchDo = ({ dir, cmd, parentState, }) => {
+const watchDo = ({ path, cmd, parentState, }) => {
     const watchState = {
         busy: false,
         doAfter: undefined,
@@ -48,7 +49,7 @@ const watchDo = ({ dir, cmd, parentState, }) => {
         });
     };
     chokidar_1.default
-        .watch(dir, {
+        .watch(path, {
         persistent: true,
     })
         .on("change", (path) => {
