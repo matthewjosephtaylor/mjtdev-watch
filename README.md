@@ -27,7 +27,7 @@ This is _simlar_ to npm-watch but has none of the 'nodemon' (leave processes run
 Usage:
 
 ```console
-$ watch ./dir, cmd1, ./dir2, 'cmd2 arg1 arg2', {etc...}
+$ watch ./dir cmd1 ./dir2 'cmd2 arg1 arg2' {etc...}
 ```
 
 Simple pairs of strings, first is the path to watch for changes, 2nd is the command to run (be sure to quote command and args)
