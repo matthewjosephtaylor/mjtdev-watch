@@ -31,9 +31,7 @@ const watchDo = ({ path, cmd, parentState, }) => {
         busy: false,
         doAfter: undefined,
     };
-    let working = false;
     const doWork = () => {
-        console.log(` performing ${cmd} `);
         watchState.busy = true;
         const child = child_process_1.spawn(`${cmd}`, {
             shell: true,
@@ -43,7 +41,9 @@ const watchDo = ({ path, cmd, parentState, }) => {
             if (code === 0) {
                 watchState.busy = false;
                 if (watchState.doAfter !== undefined) {
-                    watchState.doAfter();
+                    const doAfter = watchState.doAfter;
+                    watchState.doAfter = undefined;
+                    doAfter();
                 }
             }
         });

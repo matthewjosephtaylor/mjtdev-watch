@@ -61,9 +61,10 @@ MIT
 
 ## Changelog
 
-| Date                | Change         |
-| ------------------- | -------------- |
-| 2021-08-17 16:08:00 | Initial Commit |
+| Date                | Change                                                                        |
+| ------------------- | ----------------------------------------------------------------------------- |
+| 2021-08-17 16:08:00 | Initial Commit                                                                |
+| 2021-08-17 16:51:03 | Bump version, fix bug in 'doAfter' that made parent always call child command |
 
 
 

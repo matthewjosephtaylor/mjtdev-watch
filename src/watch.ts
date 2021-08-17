@@ -43,9 +43,7 @@ const watchDo = ({
     doAfter: undefined,
   };
 
-  let working = false;
   const doWork = () => {
-    console.log(` performing ${cmd} `);
     watchState.busy = true;
     const child = spawn(`${cmd}`, {
       shell: true,
@@ -55,7 +53,9 @@ const watchDo = ({
       if (code === 0) {
         watchState.busy = false;
         if (watchState.doAfter !== undefined) {
-          watchState.doAfter();
+          const doAfter = watchState.doAfter
+          watchState.doAfter = undefined
+          doAfter();
         }
       }
     });
