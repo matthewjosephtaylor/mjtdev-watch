@@ -1,7 +1,15 @@
 # Watch path and execute command
 
-This isn't a hard problem yet all solutions from npm-watch, to fswatch to watchman are awful.
+## Why?
 
+This shouldn't be a hard problem, yet there are no good solutions I was able to find.
+
+## Other Solutions I tried and didn't like
+- [npm-watch](https://github.com/M-Zuber/npm-watch)
+- [fswatch](https://github.com/emcrisostomo/fswatch) 
+- [watchman](https://github.com/facebook/watchman)
+
+## Problems with solutions I tried
 They leave weird running background processes when the main terminal quits
 
 -- OR --
@@ -12,16 +20,21 @@ They have no ability to watch multiple directories and do multiple different thi
 
 They are insanely complex for what should be a simple tool
 
+## So I made my own using Node.js and [chokidar](https://github.com/paulmillr/chokidar)
+
+This is _simlar_ to npm-watch but has none of the 'nodemon' (leave processes running all over the place) madness, and has IMHO a more user-friendly command-line interface.
+
 Usage:
 
 ```console
-$ ./bin/watch ./dir, cmd1, ./dir2, 'cmd2 arg1 arg2', {etc...}
+$ watch ./dir, cmd1, ./dir2, 'cmd2 arg1 arg2', {etc...}
 ```
 
-Simple pairs of strings, first is the dir to watch for changes, 2nd is the command to run (be sure to quote command and args)
+Simple pairs of strings, first is the path to watch for changes, 2nd is the command to run (be sure to quote command and args)
 
 - The child (later) commands _wait_ on previous (parent) commands to finish.
-- The command _ignores_ repeated changes on its watch-path if it is currently busy running the command
+- Commands _ignore_ repeated changes on its watch-path, if the command is currently busy running the command.
+- If the previous command fails the child commands will not run until the 'parent' runs successfully.
 
 Build: 
 ```console
@@ -38,5 +51,19 @@ $ npm install -g .
 # Or install it as a dependency
 $ npm install github.com/matthewjosephtaylor/mjtdev-watch
 ```
-## Blame Matt Taylor https://mjt.dev
+## Blame
+
+Matt Taylor https://mjt.dev
+
+## License
+
+MIT
+
+## Changelog
+
+| Date                | Change         |
+| ------------------- | -------------- |
+| 2021-08-17 16:08:00 | Initial Commit |
+
+
 
