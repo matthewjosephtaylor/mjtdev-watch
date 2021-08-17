@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "@mjtdev watch",
   "main": "./dist/index.js",
-  "bin": "./dist/watch",
+  "bin": "./bin/watch",
   "scripts": {
     "clean": "rm -rf dist/*",
     "build": "npx tsc -b && mkdir -p bin && cp src/header.sh bin/watch && cat dist/watch.js >> bin/watch"
