@@ -1,0 +1,20 @@
+{
+  "name": "@mjtdev/watch",
+  "version": "1.0.0",
+  "description": "@mjtdev watch",
+  "main": "./dist/index.js",
+  "bin": "./dist/watch",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "start": "webpack serve",
+    "build": "npx tsc -b && mkdir -p bin && cp src/header.sh bin/watch && cat dist/watch.js >> bin/watch"
+  },
+  "keywords": [],
+  "author": "@mjtdev",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+  }
+}

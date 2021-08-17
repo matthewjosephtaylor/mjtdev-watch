@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const chokidar_1 = __importDefault(require("chokidar"));
+const child_process_1 = require("child_process");
+const usage = () => {
+    console.log("watcher dir cmd [dir cmd]...");
+};
+const main = () => {
+    const args = process.argv.slice(2);
+    if (args.length % 2 != 0) {
+        usage();
+        process.exit(-1);
+    }
+    let parentState = {
+        busy: false,
+        doAfter: undefined,
+    };
+    for (let i = 0; i < args.length; i = i + 2) {
+        const dir = args[i];
+        const cmd = args[i + 1];
+        parentState = watchDo({ dir, cmd, parentState });
+    }
+};
+const watchDo = ({ dir, cmd, parentState, }) => {
+    const watchState = {
+        busy: false,
+        doAfter: undefined,
+    };
+    let working = false;
+    const doWork = () => {
+        console.log(` performing ${cmd} `);
+        watchState.busy = true;
+        const child = child_process_1.spawn(`${cmd}`, {
+            shell: true,
+            stdio: "inherit",
+        });
+        child.on("close", (code) => {
+            if (code === 0) {
+                watchState.busy = false;
+                if (watchState.doAfter !== undefined) {
+                    watchState.doAfter();
+                }
+            }
+        });
+    };
+    chokidar_1.default
+        .watch(dir, {
+        persistent: true,
+    })
+        .on("change", (path) => {
+        if (watchState.busy) {
+            return;
+        }
+        if (parentState.busy) {
+            parentState.doAfter = doWork;
+        }
+        else {
+            if (parentState.doAfter === undefined) {
+                doWork();
+            }
+        }
+    });
+    return watchState;
+};
+main();
+//# sourceMappingURL=watch.js.map
