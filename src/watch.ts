@@ -6,18 +6,20 @@ const usage = () => {
 
 type WatchState = {
   busy: boolean;
+  error: boolean;
   doAfter: () => void;
 };
 
 const main = () => {
   const args = process.argv.slice(2);
   if (args.length % 2 !== 0) {
-    console.error(`Wrong number of args ${args.length}`)
+    console.error(`Wrong number of args ${args.length}`);
     usage();
     process.exit(-1);
   }
 
   let parentState: WatchState = {
+    error: false,
     busy: false,
     doAfter: undefined,
   };
@@ -25,12 +27,12 @@ const main = () => {
   for (let i = 0; i < args.length; i = i + 2) {
     const path = args[i];
     const cmd = args[i + 1];
-    parentState = watchDo({ path , cmd, parentState });
+    parentState = watchDo({ path, cmd, parentState });
   }
 };
 
 const watchDo = ({
-  path ,
+  path,
   cmd,
   parentState,
 }: {
@@ -39,6 +41,7 @@ const watchDo = ({
   parentState: WatchState;
 }): WatchState => {
   const watchState: WatchState = {
+    error: false,
     busy: false,
     doAfter: undefined,
   };
@@ -50,13 +53,16 @@ const watchDo = ({
       stdio: "inherit",
     });
     child.on("close", (code) => {
-      if (code === 0) {
-        watchState.busy = false;
-        if (watchState.doAfter !== undefined) {
-          const doAfter = watchState.doAfter
-          watchState.doAfter = undefined
-          doAfter();
-        }
+      if (code !== 0) {
+        watchState.error = true;
+        return;
+      }
+      watchState.busy = false;
+      watchState.error = false;
+      if (watchState.doAfter !== undefined) {
+        const doAfter = watchState.doAfter;
+        watchState.doAfter = undefined;
+        doAfter();
       }
     });
   };
@@ -66,7 +72,7 @@ const watchDo = ({
       persistent: true,
     })
     .on("change", (path) => {
-      if (watchState.busy) {
+      if (watchState.busy && !watchState.error) {
         return;
       }
       if (parentState.busy) {

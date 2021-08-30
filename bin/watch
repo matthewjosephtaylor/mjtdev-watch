@@ -17,6 +17,7 @@ const main = () => {
         process.exit(-1);
     }
     let parentState = {
+        error: false,
         busy: false,
         doAfter: undefined,
     };
@@ -28,6 +29,7 @@ const main = () => {
 };
 const watchDo = ({ path, cmd, parentState, }) => {
     const watchState = {
+        error: false,
         busy: false,
         doAfter: undefined,
     };
@@ -38,13 +40,16 @@ const watchDo = ({ path, cmd, parentState, }) => {
             stdio: "inherit",
         });
         child.on("close", (code) => {
-            if (code === 0) {
-                watchState.busy = false;
-                if (watchState.doAfter !== undefined) {
-                    const doAfter = watchState.doAfter;
-                    watchState.doAfter = undefined;
-                    doAfter();
-                }
+            if (code !== 0) {
+                watchState.error = true;
+                return;
+            }
+            watchState.busy = false;
+            watchState.error = false;
+            if (watchState.doAfter !== undefined) {
+                const doAfter = watchState.doAfter;
+                watchState.doAfter = undefined;
+                doAfter();
             }
         });
     };
@@ -53,7 +58,7 @@ const watchDo = ({ path, cmd, parentState, }) => {
         persistent: true,
     })
         .on("change", (path) => {
-        if (watchState.busy) {
+        if (watchState.busy && !watchState.error) {
             return;
         }
         if (parentState.busy) {

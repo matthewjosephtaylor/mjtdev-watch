@@ -66,6 +66,7 @@ MIT
 | 2021-08-17 16:08:00 | Initial Commit                                                                |
 | 2021-08-17 16:51:03 | Bump version, fix bug in 'doAfter' that made parent always call child command |
 | 2021-08-17 17:06:54 | fix bin folder in package.json                                                |
+| 2021-08-30 15:25:07 | bugfix: failed jobs never restart                                             |
 
 
 
