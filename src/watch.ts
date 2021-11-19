@@ -25,7 +25,7 @@ const main = () => {
   };
 
   for (let i = 0; i < args.length; i = i + 2) {
-    const path = args[i];
+    const path = args[i].split(",").map((s) => s.trim());
     const cmd = args[i + 1];
     parentState = watchDo({ path, cmd, parentState });
   }
@@ -36,7 +36,7 @@ const watchDo = ({
   cmd,
   parentState,
 }: {
-  path: string;
+  path: string | string[];
   cmd: string;
   parentState: WatchState;
 }): WatchState => {

@@ -27,6 +27,13 @@ This is _simlar_ to npm-watch but has none of the 'nodemon' (leave processes run
 Usage:
 
 ```console
+# simple watch
+$ watch ./dir 'cmd arg1 arg2'
+
+# watch list of paths (comma seperated)
+$ watch './path1, path2' 'cmd arg1 arg2'
+
+# watch chaining
 $ watch ./dir cmd1 ./dir2 'cmd2 arg1 arg2' {etc...}
 ```
 
@@ -67,6 +74,7 @@ MIT
 | 2021-08-17 16:51:03 | Bump version, fix bug in 'doAfter' that made parent always call child command |
 | 2021-08-17 17:06:54 | fix bin folder in package.json                                                |
 | 2021-08-30 15:25:07 | bugfix: failed jobs never restart                                             |
+| 2021-11-19 14:35:43 | added 'list of paths' capability to watch path                                     |
 
 
 
