@@ -53,11 +53,7 @@ const watchDo = ({ path, cmd, parentState, }) => {
             }
         });
     };
-    chokidar_1.default
-        .watch(path, {
-        persistent: true,
-    })
-        .on("change", (path) => {
+    const processChange = () => {
         if (watchState.busy && !watchState.error) {
             return;
         }
@@ -69,7 +65,14 @@ const watchDo = ({ path, cmd, parentState, }) => {
                 doWork();
             }
         }
-    });
+    };
+    chokidar_1.default
+        .watch(path, {
+        persistent: true,
+        ignoreInitial: true,
+    })
+        .on("change", processChange)
+        .on("add", processChange);
     return watchState;
 };
 main();

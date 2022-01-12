@@ -67,22 +67,27 @@ const watchDo = ({
     });
   };
 
+  const processChange = () => {
+    if (watchState.busy && !watchState.error) {
+      return;
+    }
+    if (parentState.busy) {
+      parentState.doAfter = doWork;
+    } else {
+      if (parentState.doAfter === undefined) {
+        doWork();
+      }
+    }
+  };
+
   chokidar
     .watch(path, {
       persistent: true,
+      ignoreInitial: true,
     })
-    .on("change", (path) => {
-      if (watchState.busy && !watchState.error) {
-        return;
-      }
-      if (parentState.busy) {
-        parentState.doAfter = doWork;
-      } else {
-        if (parentState.doAfter === undefined) {
-          doWork();
-        }
-      }
-    });
+
+    .on("change", processChange)
+    .on("add", processChange);
   return watchState;
 };
 
