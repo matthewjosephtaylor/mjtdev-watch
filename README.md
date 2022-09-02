@@ -35,6 +35,12 @@ $ watch './path1, path2' 'cmd arg1 arg2'
 
 # watch chaining
 $ watch ./dir cmd1 ./dir2 'cmd2 arg1 arg2' {etc...}
+
+# watch long running process and terminate it on change
+$ watch --kill ./src http-server
+
+# watch long running process and signal it on change
+$ watch --signal 1 ./src http-server
 ```
 
 Simple pairs of strings, first is the path to watch for changes, 2nd is the command to run (be sure to quote command and args)
@@ -77,6 +83,7 @@ MIT
 | 2021-11-19 14:35:43 | added 'list of paths' capability to watch path                                |
 | 2022-01-12 14:37:52 | watch on 'add' events as well as 'change' events                              |
 | 2022-09-02 12:00:10 | cleanup and refactor code to use postinstall                                  |
+| 2022-09-02 13:06:43 | added --kill, --signal                                                        |
 
 
 

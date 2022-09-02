@@ -1,3 +1,5 @@
+#!/usr/bin/env npx ts-node --swc
+
 import { main } from "./main";
 (() => {
   try {

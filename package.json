@@ -2,11 +2,10 @@
   "name": "@mjtdev/watch",
   "version": "1.0.2",
   "description": "@mjtdev watch",
-  "main": "./dist/index.js",
-  "bin": "./bin/watch",
+  "main": "./src/index.ts",
+  "bin": "./dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist/*",
-    "build": "npx tsc -b && mkdir -p bin && cp src/header.sh bin/watch && cat dist/watch.js >> bin/watch",
+    "build": "npx tsc -b",
     "postinstall": "npm run build"
   },
   "keywords": [],
@@ -17,6 +16,9 @@
     "typescript": "^4.3.4"
   },
   "dependencies": {
-    "chokidar": "^3.5.2"
+    "@swc/core": "^1.2.246",
+    "arg": "^5.0.2",
+    "chokidar": "^3.5.2",
+    "ts-node": "^10.9.1"
   }
 }

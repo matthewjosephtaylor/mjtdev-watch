@@ -1,11 +1,19 @@
 import { WatchState } from "./WatchState";
 import { watchDo } from "./watchDo";
 import { usage } from "./usage";
+import { ARGS } from "./ARGS";
 
 export const main = () => {
-  const args = process.argv.slice(2);
-  if (args.length % 2 !== 0) {
-    console.error(`Wrong number of args ${args.length}`);
+  if (ARGS["--help"]) {
+    usage();
+    process.exit(0);
+  }
+
+  const pathCommandPairs = ARGS._;
+  if (pathCommandPairs.length % 2 !== 0) {
+    console.error(
+      `Invalid number of path command pairs: ${pathCommandPairs.length}`
+    );
     usage();
     process.exit(-1);
   }
@@ -16,9 +24,9 @@ export const main = () => {
     doAfter: undefined,
   };
 
-  for (let i = 0; i < args.length; i = i + 2) {
-    const path = args[i].split(",").map((s) => s.trim());
-    const cmd = args[i + 1];
+  for (let i = 0; i < pathCommandPairs.length; i = i + 2) {
+    const path = pathCommandPairs[i].split(",").map((s) => s.trim());
+    const cmd = pathCommandPairs[i + 1];
     parentState = watchDo({ path, cmd, parentState });
   }
 };

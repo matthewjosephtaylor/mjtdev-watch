@@ -1,9 +1,12 @@
 import chokidar from "chokidar";
 import { spawn } from "child_process";
 import { WatchState } from "./WatchState";
+import { getChildSignalOnChangeMaybe } from "./getChildSignalOnChangeMaybe";
 
 export const watchDo = ({
-  path, cmd, parentState,
+  path,
+  cmd,
+  parentState,
 }: {
   path: string | string[];
   cmd: string;
@@ -13,7 +16,10 @@ export const watchDo = ({
     error: false,
     busy: false,
     doAfter: undefined,
+    child: undefined,
   };
+
+  const childSignalOnChangeMaybe = getChildSignalOnChangeMaybe();
 
   const doWork = () => {
     watchState.busy = true;
@@ -21,7 +27,10 @@ export const watchDo = ({
       shell: true,
       stdio: "inherit",
     });
+    watchState.child = child;
     child.on("close", (code) => {
+      watchState.child = undefined;
+
       if (code !== 0) {
         watchState.error = true;
         return;
@@ -37,9 +46,18 @@ export const watchDo = ({
   };
 
   const processChange = () => {
+    if (
+      watchState.child !== undefined &&
+      childSignalOnChangeMaybe !== undefined
+    ) {
+      watchState.child.kill(childSignalOnChangeMaybe);
+      watchState.busy = false;
+    }
+
     if (watchState.busy && !watchState.error) {
       return;
     }
+
     if (parentState.busy) {
       parentState.doAfter = doWork;
     } else {
