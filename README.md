@@ -76,6 +76,7 @@ MIT
 | 2021-08-30 15:25:07 | bugfix: failed jobs never restart                                             |
 | 2021-11-19 14:35:43 | added 'list of paths' capability to watch path                                |
 | 2022-01-12 14:37:52 | watch on 'add' events as well as 'change' events                              |
+| 2022-09-02 12:00:10 | cleanup and refactor code to use postinstall                                  |
 
 
 

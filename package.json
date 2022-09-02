@@ -6,7 +6,8 @@
   "bin": "./bin/watch",
   "scripts": {
     "clean": "rm -rf dist/*",
-    "build": "npx tsc -b && mkdir -p bin && cp src/header.sh bin/watch && cat dist/watch.js >> bin/watch"
+    "build": "npx tsc -b && mkdir -p bin && cp src/header.sh bin/watch && cat dist/watch.js >> bin/watch",
+    "postinstall": "npm run build"
   },
   "keywords": [],
   "author": "@mjtdev",
